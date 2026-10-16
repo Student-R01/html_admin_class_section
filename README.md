@@ -72,6 +72,23 @@ Question moderation supports CSV import/export, table columns, filters, and sort
 
 A **Parameters** column next to Explanation URL shows `explanationParameters`, the query string for the explanation link (such as `a=2&b=-5`). Its **Open** link opens the explanation URL with the parameters applied. It is included in CSV import/export, with no filter or sorting.
 
+### Importing translations
+
+Question import reads translations from per-language columns: `Hindi Question`, `Hindi Options`, `Hindi Answer`, `Hindi Explanation`, and the same four for Telugu. Options are separated by `|`. Blank cells are skipped, so a partial file never clears stored translations.
+
+If your file has a single `Translations` column holding JSON (as in the CSV export), convert it first:
+
+```bash
+npm run split-translations -- path/to/questions.csv [output-folder]
+```
+
+This writes two files next to the input (or into the output folder):
+
+- `<name>-import.csv`: `ID`, `Explanations` (when present) and the Hindi and Telugu columns, ready to import on the Questions page.
+- `<name>-held.csv`: translations left out because they look scrambled, with the reason, such as text in the wrong language, an answer that is part of the question, an explanation that is only an option letter, or an explanation much shorter than the English one. Held entries stay blank in the import file, so the import keeps what is already stored. Fix them and run the converter again.
+
+Only Hindi and Telugu are converted; other languages in the JSON are ignored.
+
 Questions can be filtered by type (MCQ, short answer, fill in the blank, true/false), complete translations (every language has its question, answer and explanation), and the distinct, non-empty `sectionId` values on loaded question documents. The Correct Answer column shows the answer already stored on each question: the option marked correct for MCQs, `shortAnswerHtml` for short answers, `trueAnswer` for true/false, and the accepted `fibBanks` answers for fill in the blank.
 
 ## Taxonomy Moderation

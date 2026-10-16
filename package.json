@@ -7,7 +7,8 @@
   },
   "scripts": {
     "start": "node local-server.js",
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "split-translations": "node scripts/split-translations.js"
   },
   "dependencies": {
     "firebase-admin": "^14.5.0"
